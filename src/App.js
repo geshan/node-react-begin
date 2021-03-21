@@ -3,13 +3,15 @@ import logo from './logo.svg';
 import './App.css';
 
 const App = () => {
-  const [message, setMessage] = useState('...loading')
+  const [message, setMessage] = useState('...loading');
+  const [stories, setStories] = useState({});
 
   useEffect(() => {
     async function fetchData () {
       try {
-        let data = await (await fetch('/api')).json()
-        setMessage(data.message)
+        let data = await (await fetch('/api/news')).json()
+        setMessage(data[0].headline)
+        setStories(data);
       } catch (err) {
         setMessage(err.message)
       }
@@ -21,8 +23,9 @@ const App = () => {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+        <h2>Latest News</h2>
         <p>{message}</p>
-        <p>Change me!</p>
+        {stories.map(story => <h3>{story.headline}</h3>)}
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
