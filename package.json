@@ -5,20 +5,6 @@
   "proxy": "http://localhost:3333",
   "arc": {
     "app": "react-hello",
-    "http": [
-      {
-        "/api/news": {
-          "method": "get",
-          "src": "/api/news"
-        }
-      },
-      {
-        "/api/fetch-news": {
-          "method": "get",
-          "src": "/api/fetch-news"
-        }
-      }
-    ],
     "static": {
       "folder": "build",
       "spa": true
