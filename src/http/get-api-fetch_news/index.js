@@ -1,6 +1,39 @@
 const data = require('@begin/data');
-const parser = require('../helpers/parser');
+const Parser = require('rss-parser');
+const parser = new Parser();
 const table = 'news';
+
+function formatFeedStories(stories, source) {
+  const MAX_STORIES = 10;
+  let formattedStories = [];
+  let count = 0;
+  for (story of stories) {
+    formattedStories.push({ 
+      headline: story.title.trim(), 
+      url: story.link,
+      published_date: story.pubDate,
+      source });
+    if (count === MAX_STORIES - 1) {
+      break;
+    }
+    count++;
+  }
+
+  console.log(`Formatted ${formattedStories.length} storied from ${source}`, formattedStories);
+  return formattedStories;
+}
+
+async function getStories(feedUrl, source) {
+  try {
+    const feed = await parser.parseURL(feedUrl);
+    return formatFeedStories(feed.items, source);
+  } catch (err) {
+    const errMessage = `Error while parsing feed from news stories for ${source}`;
+    console.log(errMessage, err);
+
+    return [];
+  }
+}
 
 async function saveNewsFromSources() {
   const newsSources = [
@@ -16,7 +49,7 @@ async function saveNewsFromSources() {
   let totalStoriesSaved = 0;
 
   for (newsSource of newsSources) {
-    const stories = await parser.getStories(newsSource.feedUrl, newsSource.source);
+    const stories = await getStories(newsSource.feedUrl, newsSource.source);
     const savedCount = await saveNews(stories);
     console.log(`Saved ${savedCount} stories from ${newsSource.source}`);
     totalStoriesSaved += savedCount;
