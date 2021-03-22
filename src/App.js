@@ -11,9 +11,11 @@ const App = () => {
         await (await fetch('/api/fetch-news')).json();
         const data = await (await fetch('/api/news')).json();
         setStories(data)
-        setMessage('');
+        const message = data.length ? '' : 'No stories found';
+        setMessage(message);
       } catch (err) {
         console.log(`err: ${err.mesasge}`, err);
+        setMessage('could not fetch stories');
       }
     }
     fetchNewsStories()
@@ -26,7 +28,7 @@ const App = () => {
         <h2>Latest News</h2>
         {message}
         <div className="stories">
-          {stories.map(story => <h3><a href={story.url} target="_blank" rel="noreferrer">{story.headline}</a> By - {story.source}</h3>)}
+          {Array.isArray(stories) && stories.map(story => <h3><a href={story.url} target="_blank" rel="noreferrer">{story.headline}</a> - {story.source}</h3>)}
         </div>
       </header>
     </div>

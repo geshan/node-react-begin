@@ -44,6 +44,10 @@ async function saveNewsFromSources() {
     {
       feedUrl: 'https://abcnews.go.com/abcnews/topstories',
       source: 'ABC News'
+    },
+    {
+      feedUrl: 'https://www.theguardian.com/us-news/rss',
+      source: 'The Guardian'
     }
   ]
   let totalStoriesSaved = 0;
@@ -66,7 +70,7 @@ async function saveNews(stories) {
     const key = story.url.slice(-50);
     const newsExists = await data.get({table, key});
     if (!newsExists) {
-      storiesToInsert.push({table, key, ttl, story});
+      storiesToInsert.push({table, key, ttl, ...story});
     }
   }
 
