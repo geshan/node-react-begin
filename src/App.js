@@ -3,38 +3,27 @@ import logo from './logo.svg';
 import './App.css';
 
 const App = () => {
-  const [message, setMessage] = useState('...loading');
-
+  const [stories, setStories] = useState([]);
   useEffect(() => {
-    async function fetchData () {
+    async function fetchNewsStories () {
       try {
-        let data = await (await fetch('/api/news')).json()
-        const msg = data[0] && data[0].headline ? data[0].headline : 'No latest news story';
-        setMessage(msg)
+        let data = await (await fetch('/api/news')).json();
+        setStories(data)
       } catch (err) {
-        setMessage(err.message)
+        console.log(`err: ${err.mesasge}`, err);
       }
     }
-    fetchData()
-  })
+    fetchNewsStories()
+  }, []);
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <h2>Latest News</h2>
-        <p>{message}</p>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div className="stories">
+          {stories.map(story => <h3><a href={story.url}>{story.headline}</a> By - {story.source}</h3>)}
+        </div>
       </header>
     </div>
   );
