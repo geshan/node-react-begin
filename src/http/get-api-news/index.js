@@ -11,10 +11,13 @@ exports.handler = async function http (req) {
   let storiesToShow = [];
 
   for (newsStory of newsStrories) {
-    storiesToShow.push(pick(newsStory, ['headline', 'url', 'published_date', 'source']));
+    const pickedStory = pick(newsStory, ['headline', 'url', 'published_date', 'source']);
+    if (pickedStory.headline) {
+      storiesToShow.push(pickedStory);
+    }
   }
 
-  const sortedStories = storiesToShow.sort((a, b) => new Date(b.published_date) - new Date(a.published_date))
+  const sortedStories = storiesToShow.sort((a, b) => new Date(b.published_date) - new Date(a.published_date));
   return {
     headers: {
       'content-type': 'application/json; charset=utf8',
