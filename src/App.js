@@ -4,14 +4,13 @@ import './App.css';
 
 const App = () => {
   const [message, setMessage] = useState('...loading');
-  const [stories, setStories] = useState({});
 
   useEffect(() => {
     async function fetchData () {
       try {
         let data = await (await fetch('/api/news')).json()
-        setMessage(data[0].headline)
-        setStories(data);
+        const msg = data[0] && data[0].headline ? data[0].headline : 'No latest news story';
+        setMessage(msg)
       } catch (err) {
         setMessage(err.message)
       }
@@ -25,7 +24,6 @@ const App = () => {
         <img src={logo} className="App-logo" alt="logo" />
         <h2>Latest News</h2>
         <p>{message}</p>
-        {stories.map(story => <h3>{story.headline}</h3>)}
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
