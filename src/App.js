@@ -26,7 +26,7 @@ const App = () => {
         <h2>Latest News</h2>
         {message}
         <div className="stories">
-          {stories.map(story => <h3><a href={story.url} target="_blank">{story.headline}</a> By - {story.source}</h3>)}
+          {stories.map(story => <h3><a href={story.url} target="_blank" rel="noreferrer">{story.headline}</a> By - {story.source}</h3>)}
         </div>
       </header>
     </div>
